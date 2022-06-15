@@ -14,7 +14,6 @@ export function Post({author, publishedAt, content}) {
 
   const [newCommentText, setNewCommentText] = useState('')
 
-
   const publishedDateFormatted = format(publishedAt, "d 'de' LLLL 'ás' HH:mm'h'", {
     locale: ptBR
   })
@@ -24,6 +23,7 @@ export function Post({author, publishedAt, content}) {
     addSuffix: true
   })
 
+
   function handleCreateNewComment(){
     event.preventDefault()
     setComments([...comments, newCommentText])
@@ -32,7 +32,13 @@ export function Post({author, publishedAt, content}) {
   }
 
   function handleNewCommentChanged() {
+   event.target.setCustomValidity('')
+
     setNewCommentText(event.target.value)
+  }
+
+  function handleNewCommentInvalid() {
+   event.target.setCustomValidity('Este campo é obrigatório')
   }
 
   function deleteComment(commentToDelete){
@@ -42,6 +48,8 @@ export function Post({author, publishedAt, content}) {
 
     setComments(commentsWithoutDeleteOne);
   }
+
+  const inNewCommentEmpty = newCommentText.length === 0;
 
   return (
     <article className={styles.post}>
@@ -72,10 +80,19 @@ export function Post({author, publishedAt, content}) {
 
       <form onSubmit={handleCreateNewComment} className={styles.commentForm}>
         <strong>Deixe seu feedback</strong>
-        <textarea  value={newCommentText} placeholder='Deixe um comentário' name="comment" onChange={handleNewCommentChanged}/>
+        <textarea  
+          value={newCommentText} 
+          placeholder='Deixe um comentário' 
+          name="comment" 
+          onChange={handleNewCommentChanged}
+          onInvalid={handleNewCommentInvalid}
+          required
+        />
 
         <footer>
-          <button type='submit'>Publicar</button>
+          <button type='submit' disabled={inNewCommentEmpty}>
+              Publicar
+          </button>
         </footer>
 
       </form>

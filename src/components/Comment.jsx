@@ -5,10 +5,9 @@ import styles from './Comment.module.css'
 export function Comment({content , onDeleteComment}) {
 
   function handleDeleteComment() {
-    console.log("Deletando...")
-
     onDeleteComment(content)
   }
+
 
   return (
     <div className={styles.comment}>
